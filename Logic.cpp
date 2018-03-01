@@ -1,5 +1,9 @@
 #include "Logic.h"
 
+Car::Car() {
+    status = 0;
+}
+
 vector<Ride> readRides(const string& fileName, Info &info) {
     ifstream input;
     vector<Ride> vec;
@@ -131,13 +135,13 @@ void processMove(Car * car, int currentTick, const std::vector<Ride> & rides){
     }
 }
 
-void writeRides(const std::string& fileName, std::vector<Car> cars) {
+void writeRides(const std::string& fileName, std::vector<Car*> cars) {
     std::ofstream output;
     output.open(fileName);
     if (output) {
         for (auto curCar : cars) {
-            output << curCar.takenRides.size() << " ";
-            for (auto e : curCar.takenRides) {
+            output << curCar->takenRides.size() << " ";
+            for (auto e : curCar->takenRides) {
                 output << e << " ";
             }
             output << endl;
@@ -152,17 +156,19 @@ void logic(){
     Info info{};
     rides = readRides("b_should_be_easy.in", info);
     int ticks = info.rides;
-    std::vector<Car> cars(static_cast<unsigned int>(info.vehicles));
+    std::vector<Car*> cars{};
+    for(int i = 0; i < info.vehicles; i++) cars.push_back(new Car());
+
 
     for(int currentTick = 0; currentTick < ticks; currentTick++){
         for(Ride & r : rides) if(r.available) if(r.timeFinish <= currentTick) r.available = false;
-        for(Car & c : cars){
-            if(c.status == 0){
+        for(Car * c : cars){
+            if(c->status == 0){
                 std::vector<Ride*> possibleRides{};
                 for(Ride & r : rides) if(r.available){
                     int totalTime = 0;
-                    totalTime += travellingTime(c.position, r.goFrom);
-                    if(totalTime + currentTick < r.timeStart) totalTime += (totalTime + currentTick) - (r.timeStart - totalTime - 1);
+                    totalTime += travellingTime(c->position, r.goFrom);
+                    if(totalTime + currentTick < r.timeStart) totalTime += (totalTime + currentTick);// - (r.timeStart - totalTime - 1);
                     totalTime += travellingTime(r.goFrom, r.goTo);
                     if(currentTick + totalTime < r.timeFinish){
                         r.endTimeTemp = currentTick + totalTime;
@@ -171,7 +177,6 @@ void logic(){
                 }
 
                 if(!possibleRides.empty()) {
-
                     // choosing the best ride[will be optimised]
                     std::sort(possibleRides.begin(), possibleRides.end(), [](Ride *ride1, Ride *ride2) {
                         return ride1->endTimeTemp <= ride2->endTimeTemp;
@@ -179,19 +184,18 @@ void logic(){
 
                     Ride * chosenRide = possibleRides[0];
                     chosenRide->available = false;
-                    c.takenRides.push_back(chosenRide->id);
-                    c.currentRide = chosenRide->id;
-                    c.status = 1;
+                    c->takenRides.push_back(chosenRide->id);
+                    c->currentRide = chosenRide->id;
+                    c->status = 1;
 
-                    processMove(&c, currentTick, rides);
+                    processMove(c, currentTick, rides);
                 }
             }
+
             else{
-                processMove(&c, currentTick, rides);
+                processMove(c, currentTick, rides);
             }
         }
-
-
     }
     writeRides("output_B.txt", cars);
 

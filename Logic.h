@@ -32,6 +32,8 @@ struct Car {;
     vector<int> takenRides;
     int currentRide;
     int status; // 0 - idle, 1 - rides to start, 2 - wait, 3 - rides to finish;
+
+    Car();
 };
 
 struct Info {
@@ -55,7 +57,7 @@ bool moveCar(Car &car, Position pos);
 
 void processMove(Car * car, int currentTick, const std::vector<Ride> & rides);
 
-void writeRides(const std::string& fileName, std::vector<Car> cars);
+void writeRides(const std::string& fileName, std::vector<Car*> cars);
 
 void logic();
 
