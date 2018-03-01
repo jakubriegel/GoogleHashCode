@@ -16,12 +16,14 @@ struct Ride {
     int timeStart;
     int timeFinish;
     bool available;
+    int endTimeTemp;
 };
 
 struct Car {;
     Position position;
-    vector<Ride> takenRides;
-    bool busy;
+    vector<int> takenRides;
+    int currentRide;
+    int status; // 0 - idle, 1 - rides to start, 2 - wait, 3 - rides to finish;
 };
 
 struct Info {
