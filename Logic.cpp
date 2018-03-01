@@ -10,7 +10,9 @@ void logic(){
 
     std::vector<Ride> rides;
     std::vector<Car> cars;
-    int ticks = 1; // will read from data
+    Info info;
+    rides = readRides("a_example.in", info);
+    int ticks = info.rides;//;1; // will read from data
 
     for(int currentTick = 0; currentTick < ticks; currentTick++){
         for(Ride & r : rides) if(r.available) if(r.timeFinish <= currentTick) r.available = false;

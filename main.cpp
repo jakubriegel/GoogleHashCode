@@ -2,68 +2,28 @@
 #include <vector>
 #include <fstream>
 
+#include "Logic.cpp"
+
 using namespace std;
 
-struct position {
-	int x;
-	int y;
-};
-
-struct ride {
-	position goFrom;
-	position goTo;
-	int timeStart;
-	int timeFinish;
-};
-
-struct car {
-	position position;
-	vector<ride> takenRides;
-	bool busy;
-};
-
-
-vector<ride> readVector(const string& fileName) {
-	ifstream input;
-	vector<ride> vec;
-	input.open(fileName);
-	if (input) {
-		int first = 0;
-		int val;
-		int index = 0;
-		while (input >> val) {
-
-			ride newRide;
-			if (first <= 6) {
-				
-			}
-			switch (index) {
-			case 1:
-				newRide.goFrom.x = val;
-				break;
-			case 2:
-				newRide.goFrom.y = val;
-				break;
-			case 3:
-				newRide.goTo.x = val;
-				index = 0;
-				break;
-			default:
-				break;
-			}
-				
-			vec.push_back(newRide);
-			
-		}
-	}
-	input.close();
-
-	return vec;
+void printRide(Ride ride){
+    cout << "Ride #" << ride.id << " ";
+	cout << ride.goFrom.x << " ";
+	cout << ride.goFrom.y << " ";
+	cout << ride.goTo.x << " ";
+	cout << ride.goTo.y << " ";
+	cout << ride.timeStart << " ";
+	cout << ride.timeFinish << " ";
+	cout << endl;
 }
 
-
-
 int main() {
-	
+	vector<Ride> rides;
+
+
+	for (auto e : rides) {
+		printRide(e);
+	}
+
 	return 0;
 }
