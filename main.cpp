@@ -2,7 +2,7 @@
 #include <vector>
 #include <fstream>
 
-#include "Logic.cpp"
+#include "Logic.h"
 
 using namespace std;
 
@@ -20,10 +20,7 @@ void printRide(Ride ride){
 int main() {
 	vector<Ride> rides;
 
-
-	for (auto e : rides) {
-		printRide(e);
-	}
+    logic();
 
 	return 0;
 }
